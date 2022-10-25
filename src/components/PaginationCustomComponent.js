@@ -1,94 +1,93 @@
-import React, { useEffect } from "react";
-import { Pagination } from "react-bootstrap";
+import React, {useEffect} from "react";
+import {Pagination} from "react-bootstrap";
 
 const PaginationCustomComponent = ({
-  itemsCount,
-  itemsPerPage,
-  currentPage,
-  setCurrentPage,
-  alwaysShown = true
+    currentPage,
+    lastPage,
+    setCurrentPage,
+    alwaysShown = true
 }) => {
-  const pagesCount = Math.ceil(itemsCount / itemsPerPage);
-  const isPaginationShown = alwaysShown ? true : pagesCount > 1;
-  const isCurrentPageFirst = currentPage === 1;
-  const isCurrentPageLast = currentPage === pagesCount;
+    const pagesCount = lastPage;
+    const isPaginationShown = alwaysShown ? true : pagesCount > 1;
+    const isCurrentPageFirst = currentPage === 1;
+    const isCurrentPageLast = currentPage === pagesCount;
 
-  const changePage = number => {
-    if (currentPage === number) return;
-    setCurrentPage(number);
-  };
+    const changePage = number => {
+        if (currentPage === number) return;
+        setCurrentPage(number);
+    };
 
-  const onPageNumberClick = pageNumber => {
-    changePage(pageNumber);
-  };
+    const onPageNumberClick = pageNumber => {
+        changePage(pageNumber);
+    };
 
-  const onPreviousPageClick = () => {
-    changePage(currentPage => currentPage - 1);
-  };
+    const onPreviousPageClick = () => {
+        changePage(currentPage => currentPage - 1);
+    };
 
-  const onNextPageClick = () => {
-    changePage(currentPage => currentPage + 1);
-  };
+    const onNextPageClick = () => {
+        changePage(currentPage => currentPage + 1);
+    };
 
-  const setLastPageAsCurrent = () => {
-    if (currentPage > pagesCount) {
-      setCurrentPage(pagesCount);
-    }
-  };
+    const setLastPageAsCurrent = () => {
+        if (currentPage > pagesCount) {
+            setCurrentPage(pagesCount);
+        }
+    };
 
-  let isPageNumberOutOfRange;
+    let isPageNumberOutOfRange;
 
-  const pageNumbers = [...new Array(pagesCount)].map((_, index) => {
-    const pageNumber = index + 1;
-    const isPageNumberFirst = pageNumber === 1;
-    const isPageNumberLast = pageNumber === pagesCount;
-    const isCurrentPageWithinTwoPageNumbers =
-      Math.abs(pageNumber - currentPage) <= 1;
+    const pageNumbers = [...new Array(pagesCount)].map((_, index) => {
+        const pageNumber = index + 1;
+        const isPageNumberFirst = pageNumber === 1;
+        const isPageNumberLast = pageNumber === pagesCount;
+        const isCurrentPageWithinTwoPageNumbers =
+            Math.abs(pageNumber - currentPage) <= 1;
 
-    if (
-      isPageNumberFirst ||
-      isPageNumberLast ||
-      isCurrentPageWithinTwoPageNumbers
-    ) {
-      isPageNumberOutOfRange = false;
-      return (
-        <Pagination.Item
-          key={pageNumber}
-          onClick={() => onPageNumberClick(pageNumber)}
-          active={pageNumber === currentPage}
-        >
-          {pageNumber}
-        </Pagination.Item>
-      );
-    }
+        if (
+            isPageNumberFirst ||
+            isPageNumberLast ||
+            isCurrentPageWithinTwoPageNumbers
+        ) {
+            isPageNumberOutOfRange = false;
+            return (
+                <Pagination.Item
+                    key={pageNumber}
+                    onClick={() => onPageNumberClick(pageNumber)}
+                    active={pageNumber === currentPage}
+                >
+                    {pageNumber}
+                </Pagination.Item>
+            );
+        }
 
-    if (!isPageNumberOutOfRange) {
-      isPageNumberOutOfRange = true;
-      return <Pagination.Ellipsis key={pageNumber} className="muted" />;
-    }
+        if (!isPageNumberOutOfRange) {
+            isPageNumberOutOfRange = true;
+            return <Pagination.Ellipsis key={pageNumber} className="muted"/>;
+        }
 
-    return null;
-  });
+        return null;
+    });
 
-  useEffect(setLastPageAsCurrent, [pagesCount]);
+    useEffect(setLastPageAsCurrent, [pagesCount]);
 
-  return (
-    <>
-      {isPaginationShown && (
-        <Pagination className="d-flex align-items-center justify-content-center">
-          <Pagination.Prev
-            onClick={onPreviousPageClick}
-            disabled={isCurrentPageFirst}
-          />
-          {pageNumbers}
-          <Pagination.Next
-            onClick={onNextPageClick}
-            disabled={isCurrentPageLast}
-          />
-        </Pagination>
-      )}
-    </>
-  );
+    return (
+        <>
+            {isPaginationShown && (
+                <Pagination className="d-flex align-items-center justify-content-center">
+                    <Pagination.Prev
+                        onClick={onPreviousPageClick}
+                        disabled={isCurrentPageFirst}
+                    />
+                    {pageNumbers}
+                    <Pagination.Next
+                        onClick={onNextPageClick}
+                        disabled={isCurrentPageLast}
+                    />
+                </Pagination>
+            )}
+        </>
+    );
 };
 
 export default PaginationCustomComponent;
